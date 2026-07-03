@@ -1,0 +1,604 @@
+openapi: 3.0.3
+info:
+  title: Smoobu API
+  description: >-
+    The Smoobu API is a RESTful JSON API for the Smoobu vacation rental channel
+    manager and property management system. It lets Professional subscribers and
+    integration partners read and write apartments (listings), reservations
+    (bookings), rates and availability, guests, and guest messages, and register
+    webhooks for reservation changes. The primary base URL is
+    https://login.smoobu.com/api; the public booking availability check is served
+    under https://login.smoobu.com/booking. Authentication uses an API key sent in
+    the "Api-Key" header (found in the Smoobu account under Settings > For
+    Developers / API Keys). Smoobu additionally offers HMAC-signed requests
+    (X-API-Key, X-Timestamp, X-Nonce, X-Signature headers) as the recommended
+    method and OAuth 2 for partners; the legacy plain Api-Key header is documented
+    as being sunset on 2026-09-25. Endpoints marked in descriptions as "modeled"
+    are inferred from the documentation and should be verified against the live
+    reference before production use.
+  version: '1.0'
+  contact:
+    name: Smoobu
+    url: https://www.smoobu.com
+servers:
+  - url: https://login.smoobu.com
+    description: Smoobu production
+security:
+  - apiKey: []
+tags:
+  - name: User
+    description: The authenticated Smoobu account.
+  - name: Reservations
+    description: Bookings across all connected channels and their price elements.
+  - name: Apartments
+    description: Properties / listings in the Smoobu account.
+  - name: Rates and Availability
+    description: Daily rates, prices, availability, and booking availability checks.
+  - name: Guests
+    description: Guest contact records.
+  - name: Messaging
+    description: Reservation messages and unified inbox threads.
+paths:
+  /api/me:
+    get:
+      operationId: getMe
+      tags:
+        - User
+      summary: Get the authenticated user
+      description: Returns the Smoobu account associated with the API key.
+      responses:
+        '200':
+          description: The authenticated account.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/apartments:
+    get:
+      operationId: listApartments
+      tags:
+        - Apartments
+      summary: List apartments
+      description: Lists all apartments (properties/listings) in the account.
+      responses:
+        '200':
+          description: A list of apartments.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/apartments/{apartmentId}:
+    parameters:
+      - $ref: '#/components/parameters/ApartmentId'
+    get:
+      operationId: getApartment
+      tags:
+        - Apartments
+      summary: Get an apartment
+      description: Retrieves a single apartment's details by id.
+      responses:
+        '200':
+          description: The apartment.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/reservations:
+    get:
+      operationId: listReservations
+      tags:
+        - Reservations
+      summary: List reservations
+      description: >-
+        Lists reservations, filterable by created, arrival, departure, and
+        modified date ranges, by apartment, and with pagination.
+      parameters:
+        - name: from
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Filter reservations with arrival on or after this date.
+        - name: to
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Filter reservations with departure on or before this date.
+        - name: arrivalFrom
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: arrivalTo
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: departureFrom
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: departureTo
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: created_from
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: created_to
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: modifiedFrom
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: modifiedTo
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: apartmentId
+          in: query
+          schema:
+            type: integer
+          description: Restrict to a single apartment.
+        - name: showCancellation
+          in: query
+          schema:
+            type: boolean
+        - name: excludeBlocked
+          in: query
+          schema:
+            type: boolean
+        - name: includeRelated
+          in: query
+          schema:
+            type: boolean
+        - name: includePriceElements
+          in: query
+          schema:
+            type: boolean
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A paginated list of reservations.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createReservation
+      tags:
+        - Reservations
+      summary: Create a reservation
+      description: >-
+        Creates a reservation (booking or blocked period) on an apartment.
+        Requires apartmentId, arrivalDate, departureDate, and channelId along
+        with guest details.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationInput'
+      responses:
+        '200':
+          description: The created reservation.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /api/reservations/{reservationId}:
+    parameters:
+      - $ref: '#/components/parameters/ReservationId'
+    get:
+      operationId: getReservation
+      tags:
+        - Reservations
+      summary: Get a reservation
+      description: Retrieves a single reservation by id.
+      responses:
+        '200':
+          description: The reservation.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateReservation
+      tags:
+        - Reservations
+      summary: Update a reservation
+      description: Updates an existing reservation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationInput'
+      responses:
+        '200':
+          description: The updated reservation.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteReservation
+      tags:
+        - Reservations
+      summary: Delete a reservation
+      description: Deletes (cancels) a reservation by id.
+      responses:
+        '200':
+          description: The reservation was deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/reservations/{reservationId}/price-elements:
+    parameters:
+      - $ref: '#/components/parameters/ReservationId'
+    get:
+      operationId: listPriceElements
+      tags:
+        - Reservations
+      summary: List price elements
+      description: Lists the price elements (line items) on a reservation.
+      responses:
+        '200':
+          description: A list of price elements.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createPriceElement
+      tags:
+        - Reservations
+      summary: Create a price element
+      description: Adds a price element (line item) to a reservation. (Modeled from documentation.)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: The created price element.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/rates:
+    get:
+      operationId: getRates
+      tags:
+        - Rates and Availability
+      summary: Get rates and availability
+      description: >-
+        Returns daily rate, price, availability, and minimum-length-of-stay data
+        per apartment over a date range.
+      parameters:
+        - name: start_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: end_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: apartments[]
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+          description: One or more apartment ids to return rates for.
+      responses:
+        '200':
+          description: Daily rates and availability keyed by apartment and date.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: updateRates
+      tags:
+        - Rates and Availability
+      summary: Update rates and availability
+      description: >-
+        Pushes rate, price, availability, and restriction updates to Smoobu,
+        which propagates them to connected channels.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RatesInput'
+      responses:
+        '200':
+          description: Rates were updated.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /booking/checkApartmentAvailability:
+    post:
+      operationId: checkApartmentAvailability
+      tags:
+        - Rates and Availability
+      summary: Check apartment availability
+      description: >-
+        Checks which of the given apartments are available for a stay and returns
+        the price. Used by booking flows to quote a reservation before creating it.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                arrivalDate:
+                  type: string
+                  format: date
+                departureDate:
+                  type: string
+                  format: date
+                apartments:
+                  type: array
+                  items:
+                    type: integer
+                customerId:
+                  type: integer
+                guests:
+                  type: integer
+                discountCode:
+                  type: string
+              required:
+                - arrivalDate
+                - departureDate
+                - apartments
+      responses:
+        '200':
+          description: Availability and pricing for the requested apartments.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/guests:
+    get:
+      operationId: listGuests
+      tags:
+        - Guests
+      summary: List guests
+      description: Lists guest records, with pagination.
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A paginated list of guests.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/guests/{guestId}:
+    parameters:
+      - name: guestId
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      operationId: getGuest
+      tags:
+        - Guests
+      summary: Get a guest
+      description: Retrieves a single guest record by id.
+      responses:
+        '200':
+          description: The guest.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/reservations/{reservationId}/messages:
+    parameters:
+      - $ref: '#/components/parameters/ReservationId'
+    get:
+      operationId: listReservationMessages
+      tags:
+        - Messaging
+      summary: List reservation messages
+      description: Lists the message history for a reservation.
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: onlyRelatedToGuest
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: A list of messages.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/reservations/{reservationId}/messages/send-message-to-guest:
+    parameters:
+      - $ref: '#/components/parameters/ReservationId'
+    post:
+      operationId: sendMessageToGuest
+      tags:
+        - Messaging
+      summary: Send a message to the guest
+      description: Sends a message to the guest on a reservation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageInput'
+      responses:
+        '200':
+          description: The message was sent.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/reservations/{reservationId}/messages/send-message-to-host:
+    parameters:
+      - $ref: '#/components/parameters/ReservationId'
+    post:
+      operationId: sendMessageToHost
+      tags:
+        - Messaging
+      summary: Send a message to the host
+      description: Sends a message to the host/channel on a reservation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageInput'
+      responses:
+        '200':
+          description: The message was sent.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/threads:
+    get:
+      operationId: listThreads
+      tags:
+        - Messaging
+      summary: List message threads
+      description: Lists message threads across the unified inbox, with pagination.
+      parameters:
+        - name: page_number
+          in: query
+          schema:
+            type: integer
+        - name: page_size
+          in: query
+          schema:
+            type: integer
+        - name: apartments[]
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+      responses:
+        '200':
+          description: A paginated list of threads.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: Api-Key
+      description: >-
+        Smoobu API key sent in the Api-Key header. HMAC-signed requests
+        (X-API-Key / X-Timestamp / X-Nonce / X-Signature) are the recommended
+        method; OAuth 2 is available for partners. The plain Api-Key header is
+        documented as being sunset on 2026-09-25.
+  parameters:
+    ApartmentId:
+      name: apartmentId
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: The apartment id.
+    ReservationId:
+      name: reservationId
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: The reservation id.
+  responses:
+    Unauthorized:
+      description: Authentication failed or the API key is missing or invalid.
+    NotFound:
+      description: The requested resource was not found.
+    ValidationError:
+      description: The request payload failed validation.
+  schemas:
+    ReservationInput:
+      type: object
+      properties:
+        arrivalDate:
+          type: string
+          format: date
+        departureDate:
+          type: string
+          format: date
+        apartmentId:
+          type: integer
+        channelId:
+          type: integer
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        adults:
+          type: integer
+        children:
+          type: integer
+        price:
+          type: number
+        notice:
+          type: string
+      required:
+        - arrivalDate
+        - departureDate
+        - apartmentId
+        - channelId
+    RatesInput:
+      type: object
+      properties:
+        apartments:
+          type: array
+          items:
+            type: integer
+        operations:
+          type: array
+          items:
+            type: object
+            properties:
+              dates:
+                type: array
+                items:
+                  type: string
+                  format: date
+              daily_price:
+                type: number
+              min_length_of_stay:
+                type: integer
+              available:
+                type: integer
+    MessageInput:
+      type: object
+      properties:
+        messageBody:
+          type: string
+      required:
+        - messageBody

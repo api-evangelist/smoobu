@@ -1,0 +1,107 @@
+aid: smoobu
+name: Smoobu
+review:
+  question: Does Smoobu expose a documented public WebSocket API?
+  answer: false
+  date: '2026-07-03'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was authored. Smoobu's public integration surface is a
+    request/response REST API over HTTPS (base https://login.smoobu.com/api) plus
+    outbound server-to-server webhooks. The only server-push mechanism Smoobu
+    documents is webhooks - Smoobu POSTs a JSON payload to a URL you register when
+    a reservation changes. There is no client-subscribed, bidirectional WebSocket
+    (ws:// or wss://) endpoint on Smoobu's own API to model. Webhooks are HTTP
+    callbacks, not a WebSocket transport.
+findings:
+  summary: |
+    Smoobu does not publish a documented public WebSocket API. Smoobu is a
+    vacation rental channel manager and property management system. Its public
+    developer surface is a RESTful JSON API at base https://login.smoobu.com/api
+    (the booking availability check is served under https://login.smoobu.com/booking),
+    authenticated with an API key sent in the Api-Key header. Smoobu additionally
+    documents HMAC-signed requests (X-API-Key / X-Timestamp / X-Nonce / X-Signature)
+    as the recommended method and OAuth 2 for partners; the legacy plain Api-Key
+    header is documented as being sunset on 2026-09-25. Real-time change
+    notification is delivered by outbound webhooks - Smoobu POSTs a JSON body with
+    an "action" field (newReservation, updateReservation, cancelReservation,
+    deleteReservation), a "user" id, and the affected reservation "data" - not by a
+    WebSocket. No realtime, bidirectional, or streaming WebSocket endpoint is
+    documented anywhere in Smoobu's API reference as of the review date.
+  openSource: |
+    Smoobu is a proprietary, hosted SaaS product; the platform itself is not open
+    source. Smoobu publishes REST API documentation at docs.smoobu.com and
+    third-party community client libraries exist (for example CliffS/smoobu on
+    GitHub), but there is no official open-source Smoobu server or SDK monorepo
+    that constitutes the product.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://login.smoobu.com/api
+      documented: true
+      note: Primary REST API for apartments, reservations, rates/availability, guests, and messages. API-key header auth (HMAC recommended, OAuth 2 for partners).
+    - protocol: REST
+      scheme: https
+      baseURL: https://login.smoobu.com/booking
+      documented: true
+      note: Public booking availability check (POST /checkApartmentAvailability), served under /booking rather than /api.
+    - protocol: Webhook
+      scheme: https
+      documented: true
+      note: Outbound server-to-server HTTP callbacks on reservation change (newReservation, updateReservation, cancelReservation, deleteReservation). HTTP POST to a registered URL, not a WebSocket.
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented anywhere in Smoobu's API reference as of the review date.
+  endpointsConfirmedRest:
+    - GET    https://login.smoobu.com/api/me
+    - GET    https://login.smoobu.com/api/apartments
+    - GET    https://login.smoobu.com/api/apartments/{apartmentId}
+    - GET    https://login.smoobu.com/api/reservations
+    - POST   https://login.smoobu.com/api/reservations
+    - GET    https://login.smoobu.com/api/reservations/{reservationId}
+    - PUT    https://login.smoobu.com/api/reservations/{reservationId}
+    - DELETE https://login.smoobu.com/api/reservations/{reservationId}
+    - GET    https://login.smoobu.com/api/reservations/{reservationId}/price-elements
+    - GET    https://login.smoobu.com/api/rates
+    - POST   https://login.smoobu.com/api/rates
+    - POST   https://login.smoobu.com/booking/checkApartmentAvailability
+    - GET    https://login.smoobu.com/api/guests
+    - GET    https://login.smoobu.com/api/guests/{guestId}
+    - GET    https://login.smoobu.com/api/reservations/{reservationId}/messages
+    - POST   https://login.smoobu.com/api/reservations/{reservationId}/messages/send-message-to-guest
+    - POST   https://login.smoobu.com/api/reservations/{reservationId}/messages/send-message-to-host
+    - GET    https://login.smoobu.com/api/threads
+  endpointsModeledRest:
+    - POST   https://login.smoobu.com/api/reservations/{reservationId}/price-elements
+  webhookActions:
+    - newReservation
+    - updateReservation
+    - cancelReservation
+    - deleteReservation
+sources:
+  - url: https://docs.smoobu.com/
+    type: Documentation
+    note: Smoobu API reference - base URL, API-key/HMAC/OAuth auth, endpoints, rate limits, and webhooks. No WebSocket mentioned.
+  - url: https://www.smoobu.com/en/for-developers/
+    type: Documentation
+    note: Developer landing page for the Smoobu API.
+  - url: https://www.smoobu.com/en/pricing/
+    type: Pricing
+    note: Per-unit subscription pricing (Professional Pre-Paid, Professional Flex, Teams Pro+).
+  - url: https://support.smoobu.com/hc/en-us/articles/360003170740-Smoobu-API-Documentation
+    type: Documentation
+    note: Support article describing where to find API keys and how the API works.
+  - url: https://github.com/CliffS/smoobu
+    type: SourceCode
+    note: Third-party community Node.js client for the Smoobu Host API (not official).
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket protocol surface exists. Smoobu's own public API is
+    request/response REST plus outbound HTTP webhooks. No AsyncAPI document was
+    created because there is no server-push, subscription-based transport
+    (WebSocket or SSE) on Smoobu's API to model; webhooks are one-way HTTP
+    callbacks and are represented as a webhook API entry in apis.yml instead.

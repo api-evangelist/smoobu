@@ -1,0 +1,266 @@
+{
+  "info": {
+    "name": "Smoobu API",
+    "description": "RESTful JSON API for the Smoobu vacation rental channel manager and property management system. Read and write apartments, reservations, rates and availability, guests, and guest messages, and register webhooks for reservation changes. Base URL: https://login.smoobu.com/api (booking availability check is served under https://login.smoobu.com/booking). Authentication uses an API key sent in the Api-Key header (HMAC-signed requests are recommended; OAuth 2 is available for partners).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      { "key": "key", "value": "Api-Key", "type": "string" },
+      { "key": "value", "value": "{{apiKey}}", "type": "string" },
+      { "key": "in", "value": "header", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://login.smoobu.com/api", "type": "string" },
+    { "key": "bookingUrl", "value": "https://login.smoobu.com/booking", "type": "string" },
+    { "key": "apiKey", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Get the authenticated user",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/me", "host": ["{{baseUrl}}"], "path": ["me"] },
+            "description": "Returns the Smoobu account associated with the API key."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Apartments",
+      "item": [
+        {
+          "name": "List apartments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/apartments", "host": ["{{baseUrl}}"], "path": ["apartments"] },
+            "description": "Lists all apartments (properties/listings) in the account."
+          }
+        },
+        {
+          "name": "Get an apartment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/apartments/:apartmentId", "host": ["{{baseUrl}}"], "path": ["apartments", ":apartmentId"], "variable": [{ "key": "apartmentId", "value": "" }] },
+            "description": "Retrieves a single apartment's details by id."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reservations",
+      "item": [
+        {
+          "name": "List reservations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reservations?from=&to=&page=1&pageSize=25",
+              "host": ["{{baseUrl}}"],
+              "path": ["reservations"],
+              "query": [
+                { "key": "from", "value": "" },
+                { "key": "to", "value": "" },
+                { "key": "arrivalFrom", "value": "", "disabled": true },
+                { "key": "arrivalTo", "value": "", "disabled": true },
+                { "key": "departureFrom", "value": "", "disabled": true },
+                { "key": "departureTo", "value": "", "disabled": true },
+                { "key": "modifiedFrom", "value": "", "disabled": true },
+                { "key": "modifiedTo", "value": "", "disabled": true },
+                { "key": "apartmentId", "value": "", "disabled": true },
+                { "key": "showCancellation", "value": "", "disabled": true },
+                { "key": "excludeBlocked", "value": "", "disabled": true },
+                { "key": "includePriceElements", "value": "", "disabled": true },
+                { "key": "page", "value": "1" },
+                { "key": "pageSize", "value": "25" }
+              ]
+            },
+            "description": "Lists reservations, filterable by date ranges and apartment, with pagination."
+          }
+        },
+        {
+          "name": "Create a reservation",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"arrivalDate\": \"2026-08-01\",\n  \"departureDate\": \"2026-08-05\",\n  \"apartmentId\": 0,\n  \"channelId\": 0,\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Doe\",\n  \"email\": \"jane@example.com\",\n  \"adults\": 2,\n  \"price\": 400\n}" },
+            "url": { "raw": "{{baseUrl}}/reservations", "host": ["{{baseUrl}}"], "path": ["reservations"] },
+            "description": "Creates a reservation (booking or blocked period) on an apartment."
+          }
+        },
+        {
+          "name": "Get a reservation",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/reservations/:reservationId", "host": ["{{baseUrl}}"], "path": ["reservations", ":reservationId"], "variable": [{ "key": "reservationId", "value": "" }] },
+            "description": "Retrieves a single reservation by id."
+          }
+        },
+        {
+          "name": "Update a reservation",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": { "raw": "{{baseUrl}}/reservations/:reservationId", "host": ["{{baseUrl}}"], "path": ["reservations", ":reservationId"], "variable": [{ "key": "reservationId", "value": "" }] },
+            "description": "Updates an existing reservation."
+          }
+        },
+        {
+          "name": "Delete a reservation",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/reservations/:reservationId", "host": ["{{baseUrl}}"], "path": ["reservations", ":reservationId"], "variable": [{ "key": "reservationId", "value": "" }] },
+            "description": "Deletes (cancels) a reservation by id."
+          }
+        },
+        {
+          "name": "List price elements",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/reservations/:reservationId/price-elements", "host": ["{{baseUrl}}"], "path": ["reservations", ":reservationId", "price-elements"], "variable": [{ "key": "reservationId", "value": "" }] },
+            "description": "Lists the price elements (line items) on a reservation."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rates and Availability",
+      "item": [
+        {
+          "name": "Get rates and availability",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/rates?start_date=&end_date=&apartments[]=",
+              "host": ["{{baseUrl}}"],
+              "path": ["rates"],
+              "query": [
+                { "key": "start_date", "value": "" },
+                { "key": "end_date", "value": "" },
+                { "key": "apartments[]", "value": "" }
+              ]
+            },
+            "description": "Returns daily rate, price, availability, and minimum-length-of-stay per apartment over a date range."
+          }
+        },
+        {
+          "name": "Update rates and availability",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"apartments\": [0],\n  \"operations\": [\n    {\n      \"dates\": [\"2026-08-01\", \"2026-08-02\"],\n      \"daily_price\": 120,\n      \"min_length_of_stay\": 2,\n      \"available\": 1\n    }\n  ]\n}" },
+            "url": { "raw": "{{baseUrl}}/rates", "host": ["{{baseUrl}}"], "path": ["rates"] },
+            "description": "Pushes rate, price, availability, and restriction updates to Smoobu, which propagates them to connected channels."
+          }
+        },
+        {
+          "name": "Check apartment availability",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"arrivalDate\": \"2026-08-01\",\n  \"departureDate\": \"2026-08-05\",\n  \"apartments\": [0],\n  \"guests\": 2\n}" },
+            "url": { "raw": "{{bookingUrl}}/checkApartmentAvailability", "host": ["{{bookingUrl}}"], "path": ["checkApartmentAvailability"] },
+            "description": "Checks which of the given apartments are available for a stay and returns the price."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Guests",
+      "item": [
+        {
+          "name": "List guests",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/guests?page=1&pageSize=25",
+              "host": ["{{baseUrl}}"],
+              "path": ["guests"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "pageSize", "value": "25" }
+              ]
+            },
+            "description": "Lists guest records, with pagination."
+          }
+        },
+        {
+          "name": "Get a guest",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/guests/:guestId", "host": ["{{baseUrl}}"], "path": ["guests", ":guestId"], "variable": [{ "key": "guestId", "value": "" }] },
+            "description": "Retrieves a single guest record by id."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Messaging",
+      "item": [
+        {
+          "name": "List reservation messages",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/reservations/:reservationId/messages", "host": ["{{baseUrl}}"], "path": ["reservations", ":reservationId", "messages"], "variable": [{ "key": "reservationId", "value": "" }] },
+            "description": "Lists the message history for a reservation."
+          }
+        },
+        {
+          "name": "Send a message to the guest",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"messageBody\": \"Hello, welcome!\"\n}" },
+            "url": { "raw": "{{baseUrl}}/reservations/:reservationId/messages/send-message-to-guest", "host": ["{{baseUrl}}"], "path": ["reservations", ":reservationId", "messages", "send-message-to-guest"], "variable": [{ "key": "reservationId", "value": "" }] },
+            "description": "Sends a message to the guest on a reservation."
+          }
+        },
+        {
+          "name": "Send a message to the host",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"messageBody\": \"Hello, host!\"\n}" },
+            "url": { "raw": "{{baseUrl}}/reservations/:reservationId/messages/send-message-to-host", "host": ["{{baseUrl}}"], "path": ["reservations", ":reservationId", "messages", "send-message-to-host"], "variable": [{ "key": "reservationId", "value": "" }] },
+            "description": "Sends a message to the host/channel on a reservation."
+          }
+        },
+        {
+          "name": "List message threads",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/threads?page_number=1&page_size=25",
+              "host": ["{{baseUrl}}"],
+              "path": ["threads"],
+              "query": [
+                { "key": "page_number", "value": "1" },
+                { "key": "page_size", "value": "25" },
+                { "key": "apartments[]", "value": "", "disabled": true }
+              ]
+            },
+            "description": "Lists message threads across the unified inbox, with pagination."
+          }
+        }
+      ]
+    }
+  ]
+}

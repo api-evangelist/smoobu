@@ -1,0 +1,53 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Smoobu
+providerId: smoobu
+created: '2026-07-03'
+modified: '2026-07-03'
+reconciled: false
+tags:
+- Vacation Rental
+- Channel Manager
+- Reservations
+- Rate Limiting
+- Quotas
+description: >-
+  Smoobu documents a request-rate limit on its REST API. As documented, Smoobu
+  allows up to 1000 requests per minute per account. Every response carries
+  rate-limit headers so clients can track remaining budget and back off. When the
+  limit is exceeded, the API responds with HTTP 429 and a retry-after hint.
+notes: >-
+  The documented ceiling is 1000 requests/minute. Confirm the exact scope
+  (per account vs per key) and any per-endpoint variation against the live
+  Smoobu API documentation before relying on it.
+sources:
+- https://docs.smoobu.com/
+responseCodes:
+  throttled: 429
+headers:
+- name: X-RateLimit-Limit
+  description: The maximum number of requests allowed in the current window.
+- name: X-RateLimit-Remaining
+  description: The number of requests remaining in the current window.
+- name: X-RateLimit-Retry-After
+  description: Seconds to wait before retrying once the limit has been exceeded.
+limits:
+- name: Requests Per Minute
+  scope: account
+  metric: requests
+  limit: 1000
+  timeFrame: minute
+  notes: Documented ceiling of 1000 requests per minute.
+policies:
+- name: Backoff Strategy
+  description: >-
+    On a 429 response, honor the X-RateLimit-Retry-After header and retry with
+    exponential backoff and jitter.
+- name: Header Awareness
+  description: >-
+    Track X-RateLimit-Remaining on each response and throttle proactively before
+    exhausting the window.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

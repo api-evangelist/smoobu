@@ -1,0 +1,97 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Smoobu
+providerId: smoobu
+created: '2026-07-03'
+modified: '2026-07-03'
+reconciled: false
+tags:
+- Vacation Rental
+- Channel Manager
+- Property Management
+- Short-Term Rental
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of Smoobu spend. Smoobu is a per-unit SaaS subscription for
+  short-term rental hosts and property managers; the REST API and webhooks are
+  included with a Professional subscription at no additional per-call cost. The
+  dominant cost driver is therefore the number of rental units (apartments)
+  under management, the chosen plan (Professional Pre-Paid, Professional Flex, or
+  Teams Pro+), the billing term (monthly, annual, or two-year), and optional
+  add-ons (extra write-access accounts, e-invoicing, dynamic pricing). The
+  Professional Flex plan additionally charges a small per-booking commission.
+notes: >-
+  There is no separate API meter to allocate - cost tracks units and add-ons.
+  Verify unit prices, commission, and add-on fees on the Smoobu pricing page;
+  amounts are in EUR and vary by region and billing term.
+sources:
+- https://www.smoobu.com/en/pricing/
+- https://support.smoobu.com/hc/en-us/articles/360003170680-How-much-will-Smoobu-cost-me
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Smoobu
+serviceCategory: Vacation Rental Management Software
+billingModel:
+  pricingCategory: Subscription-Based
+  billingFrequency: Monthly
+  billingCurrency: EUR
+  chargeCategories:
+  - Usage
+  - Purchase
+focusColumns:
+  ServiceName: Smoobu
+  ServiceCategory: Vacation Rental Management Software
+  ProviderName: Smoobu
+  PublisherName: Smoobu
+  InvoiceIssuerName: Smoobu
+  BillingCurrency: EUR
+  ChargeCategory: Purchase
+  PricingCategory: Subscription-Based
+meters:
+- name: units
+  description: Number of rental units (apartments) managed; the primary per-unit subscription driver.
+  unit: units
+  aggregation: sum
+  dimensions:
+  - account
+  - plan
+- name: bookings_commission
+  description: Per-booking commission charged on the Professional Flex plan (0.9% of booking value).
+  unit: bookings
+  aggregation: sum
+  dimensions:
+  - account
+  - apartment
+- name: write_access_accounts
+  description: Additional write-access user accounts billed per month.
+  unit: accounts
+  aggregation: sum
+  dimensions:
+  - account
+- name: dynamic_pricing
+  description: Smoobu Dynamic Pricing add-on billed per property per month.
+  unit: properties
+  aggregation: sum
+  dimensions:
+  - account
+  - apartment
+principles:
+- name: Visibility
+  description: Track the number of active units, add-ons, and (on Flex) booking commission per account.
+- name: Allocation
+  description: Map units and add-ons to properties/portfolios so subscription cost lands on the right cost center.
+- name: Optimization
+  description: Choose the plan and billing term (annual/two-year discounts) that best fit unit count and booking volume; drop unused write-access seats and add-ons.
+- name: Accountability
+  description: Assign an owner per account/portfolio to review the monthly subscription, add-ons, and any Flex commission.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

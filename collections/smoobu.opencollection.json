@@ -1,0 +1,243 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Smoobu API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "apikey": {
+        "key": "Api-Key",
+        "value": "{{apiKey}}",
+        "in": "header"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": { "name": "User", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Get the authenticated user.", "type": "http" },
+          "http": { "method": "GET", "url": "https://login.smoobu.com/api/me" },
+          "docs": "Returns the Smoobu account associated with the API key."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Apartments", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List apartments.", "type": "http" },
+          "http": { "method": "GET", "url": "https://login.smoobu.com/api/apartments" },
+          "docs": "Lists all apartments (properties/listings) in the account."
+        },
+        {
+          "info": { "name": "Get an apartment.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://login.smoobu.com/api/apartments/:apartmentId",
+            "params": [
+              { "name": "apartmentId", "value": "", "type": "path", "description": "The apartment id." }
+            ]
+          },
+          "docs": "Retrieves a single apartment's details by id."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Reservations", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List reservations.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://login.smoobu.com/api/reservations?page=1&pageSize=25",
+            "params": [
+              { "name": "from", "value": "", "type": "query", "description": "Arrival on or after this date." },
+              { "name": "to", "value": "", "type": "query", "description": "Departure on or before this date." },
+              { "name": "apartmentId", "value": "", "type": "query", "description": "Restrict to a single apartment." },
+              { "name": "includePriceElements", "value": "", "type": "query", "description": "Include price elements in the response." },
+              { "name": "page", "value": "1", "type": "query", "description": "Page number." },
+              { "name": "pageSize", "value": "25", "type": "query", "description": "Page size." }
+            ]
+          },
+          "docs": "Lists reservations, filterable by date ranges and apartment, with pagination."
+        },
+        {
+          "info": { "name": "Create a reservation.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://login.smoobu.com/api/reservations",
+            "body": { "type": "json", "data": "{\n  \"arrivalDate\": \"2026-08-01\",\n  \"departureDate\": \"2026-08-05\",\n  \"apartmentId\": 0,\n  \"channelId\": 0,\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Doe\",\n  \"email\": \"jane@example.com\",\n  \"adults\": 2,\n  \"price\": 400\n}" }
+          },
+          "docs": "Creates a reservation (booking or blocked period) on an apartment."
+        },
+        {
+          "info": { "name": "Get a reservation.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://login.smoobu.com/api/reservations/:reservationId",
+            "params": [
+              { "name": "reservationId", "value": "", "type": "path", "description": "The reservation id." }
+            ]
+          },
+          "docs": "Retrieves a single reservation by id."
+        },
+        {
+          "info": { "name": "Update a reservation.", "type": "http" },
+          "http": {
+            "method": "PUT",
+            "url": "https://login.smoobu.com/api/reservations/:reservationId",
+            "params": [
+              { "name": "reservationId", "value": "", "type": "path", "description": "The reservation id." }
+            ],
+            "body": { "type": "json", "data": "{}" }
+          },
+          "docs": "Updates an existing reservation."
+        },
+        {
+          "info": { "name": "Delete a reservation.", "type": "http" },
+          "http": {
+            "method": "DELETE",
+            "url": "https://login.smoobu.com/api/reservations/:reservationId",
+            "params": [
+              { "name": "reservationId", "value": "", "type": "path", "description": "The reservation id." }
+            ]
+          },
+          "docs": "Deletes (cancels) a reservation by id."
+        },
+        {
+          "info": { "name": "List price elements.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://login.smoobu.com/api/reservations/:reservationId/price-elements",
+            "params": [
+              { "name": "reservationId", "value": "", "type": "path", "description": "The reservation id." }
+            ]
+          },
+          "docs": "Lists the price elements (line items) on a reservation."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Rates and Availability", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Get rates and availability.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://login.smoobu.com/api/rates?start_date=&end_date=&apartments[]=",
+            "params": [
+              { "name": "start_date", "value": "", "type": "query", "description": "Start of the date range." },
+              { "name": "end_date", "value": "", "type": "query", "description": "End of the date range." },
+              { "name": "apartments[]", "value": "", "type": "query", "description": "One or more apartment ids." }
+            ]
+          },
+          "docs": "Returns daily rate, price, availability, and minimum-length-of-stay per apartment over a date range."
+        },
+        {
+          "info": { "name": "Update rates and availability.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://login.smoobu.com/api/rates",
+            "body": { "type": "json", "data": "{\n  \"apartments\": [0],\n  \"operations\": [\n    {\n      \"dates\": [\"2026-08-01\", \"2026-08-02\"],\n      \"daily_price\": 120,\n      \"min_length_of_stay\": 2,\n      \"available\": 1\n    }\n  ]\n}" }
+          },
+          "docs": "Pushes rate, price, availability, and restriction updates to Smoobu, which propagates them to connected channels."
+        },
+        {
+          "info": { "name": "Check apartment availability.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://login.smoobu.com/booking/checkApartmentAvailability",
+            "body": { "type": "json", "data": "{\n  \"arrivalDate\": \"2026-08-01\",\n  \"departureDate\": \"2026-08-05\",\n  \"apartments\": [0],\n  \"guests\": 2\n}" }
+          },
+          "docs": "Checks which of the given apartments are available for a stay and returns the price."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Guests", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List guests.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://login.smoobu.com/api/guests?page=1&pageSize=25",
+            "params": [
+              { "name": "page", "value": "1", "type": "query", "description": "Page number." },
+              { "name": "pageSize", "value": "25", "type": "query", "description": "Page size." }
+            ]
+          },
+          "docs": "Lists guest records, with pagination."
+        },
+        {
+          "info": { "name": "Get a guest.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://login.smoobu.com/api/guests/:guestId",
+            "params": [
+              { "name": "guestId", "value": "", "type": "path", "description": "The guest id." }
+            ]
+          },
+          "docs": "Retrieves a single guest record by id."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Messaging", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List reservation messages.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://login.smoobu.com/api/reservations/:reservationId/messages",
+            "params": [
+              { "name": "reservationId", "value": "", "type": "path", "description": "The reservation id." }
+            ]
+          },
+          "docs": "Lists the message history for a reservation."
+        },
+        {
+          "info": { "name": "Send a message to the guest.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://login.smoobu.com/api/reservations/:reservationId/messages/send-message-to-guest",
+            "params": [
+              { "name": "reservationId", "value": "", "type": "path", "description": "The reservation id." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"messageBody\": \"Hello, welcome!\"\n}" }
+          },
+          "docs": "Sends a message to the guest on a reservation."
+        },
+        {
+          "info": { "name": "Send a message to the host.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://login.smoobu.com/api/reservations/:reservationId/messages/send-message-to-host",
+            "params": [
+              { "name": "reservationId", "value": "", "type": "path", "description": "The reservation id." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"messageBody\": \"Hello, host!\"\n}" }
+          },
+          "docs": "Sends a message to the host/channel on a reservation."
+        },
+        {
+          "info": { "name": "List message threads.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://login.smoobu.com/api/threads?page_number=1&page_size=25",
+            "params": [
+              { "name": "page_number", "value": "1", "type": "query", "description": "Page number." },
+              { "name": "page_size", "value": "25", "type": "query", "description": "Page size." },
+              { "name": "apartments[]", "value": "", "type": "query", "description": "One or more apartment ids." }
+            ]
+          },
+          "docs": "Lists message threads across the unified inbox, with pagination."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

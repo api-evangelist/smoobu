@@ -1,0 +1,195 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Smoobu
+providerId: smoobu
+created: '2026-07-03'
+modified: '2026-07-03'
+reconciled: false
+tags:
+- Vacation Rental
+- Channel Manager
+- Property Management
+- Short-Term Rental
+- Plans
+description: >-
+  Smoobu is sold as a per-unit SaaS subscription, not as a separately metered
+  API product. The API is included for Professional subscribers - there is no
+  additional per-call API fee - so the plans below reflect Smoobu's product
+  subscription tiers, priced by the number of rental units (apartments) managed.
+  A free trial is available. Subscriptions are billed monthly by default, with a
+  ~10% discount for annual and ~20% for two-year commitments. Prices are in EUR
+  and were observed on the Smoobu pricing page around July 2026; verify current
+  figures before relying on them.
+notes: >-
+  The API itself carries no separate charge; access is a function of holding a
+  Professional (or Teams) subscription. Reconcile exact unit prices, commission,
+  and add-on fees against the live Smoobu pricing page - figures change and vary
+  by region and billing term.
+sources:
+- https://www.smoobu.com/en/pricing/
+- https://support.smoobu.com/hc/en-us/articles/360003170680-How-much-will-Smoobu-cost-me
+- https://docs.smoobu.com/
+plans:
+- id: smoobu-trial
+  name: Free Trial
+  type: free
+  description: >-
+    Time-limited free trial of the Professional feature set, including channel
+    management and API access, before choosing a paid plan.
+  entries:
+  - label: Trial Period
+    name: trial
+    type: flat
+    metric: subscription
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: free during trial
+    userMultiplied: false
+  elements:
+  - name: Channel Manager
+  - name: Booking Website
+  - name: API Access
+- id: smoobu-professional-prepaid
+  name: Professional Pre-Paid
+  type: paid
+  description: >-
+    Core Professional plan billed per unit. Includes the channel manager,
+    booking website, unified inbox, guest communication, and full REST API and
+    webhook access.
+  entries:
+  - label: First Unit
+    name: first_unit
+    type: flat
+    metric: unit
+    limit: 1
+    timeFrame: month
+    geo: global
+    unit: 1
+    currency: EUR
+    price: '35.00'
+    userMultiplied: false
+  - label: Additional Unit
+    name: additional_unit
+    type: usage
+    metric: unit
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    currency: EUR
+    price: '12.00'
+    userMultiplied: false
+  elements:
+  - name: Channel Manager
+  - name: Booking Website
+  - name: Unified Inbox
+  - name: API Access
+  - name: Webhooks
+- id: smoobu-professional-flex
+  name: Professional Flex
+  type: paid
+  description: >-
+    Flexible Professional plan billed per unit with a small per-booking
+    commission instead of a longer commitment. Same core features and API access.
+  entries:
+  - label: First Unit
+    name: first_unit
+    type: flat
+    metric: unit
+    limit: 1
+    timeFrame: month
+    geo: global
+    unit: 1
+    currency: EUR
+    price: '29.00'
+    userMultiplied: false
+  - label: Additional Unit
+    name: additional_unit
+    type: usage
+    metric: unit
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    currency: EUR
+    price: '12.00'
+    userMultiplied: false
+  - label: Bookings Commission
+    name: bookings_commission
+    type: usage
+    metric: booking
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: 0.9% of booking value
+    userMultiplied: false
+  elements:
+  - name: Channel Manager
+  - name: Booking Website
+  - name: Unified Inbox
+  - name: API Access
+  - name: Webhooks
+- id: smoobu-teams-pro-plus
+  name: Teams Pro+
+  type: paid
+  description: >-
+    Plan for teams and larger portfolios, adding multiple write-access accounts,
+    included dynamic pricing, and e-invoicing on top of the Professional feature
+    set and API access.
+  entries:
+  - label: First Unit
+    name: first_unit
+    type: flat
+    metric: unit
+    limit: 1
+    timeFrame: month
+    geo: global
+    unit: 1
+    currency: EUR
+    price: '55.00'
+    userMultiplied: false
+  - label: Additional Unit
+    name: additional_unit
+    type: usage
+    metric: unit
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    currency: EUR
+    price: 'from 12.00'
+    userMultiplied: false
+  elements:
+  - name: 2 Write-Access Accounts
+  - name: Dynamic Pricing (included months)
+  - name: E-Invoicing
+  - name: API Access
+  - name: Webhooks
+addOns:
+- name: Write-Access Account
+  price: '15.00'
+  currency: EUR
+  timeFrame: month
+  description: Additional user account with write access.
+- name: E-Invoices
+  price: '5.90'
+  currency: EUR
+  timeFrame: month
+  description: E-invoice generation, priced per Smoobu account.
+- name: Dynamic Pricing
+  price: '12.99'
+  currency: EUR
+  timeFrame: month
+  description: Smoobu Dynamic Pricing, priced per property.
+discounts:
+- term: annual
+  description: Approximately 10% off for an annual commitment.
+- term: two-year
+  description: Approximately 20% off for a two-year commitment.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

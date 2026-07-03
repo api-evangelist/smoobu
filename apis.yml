@@ -1,0 +1,178 @@
+aid: smoobu
+url: https://raw.githubusercontent.com/api-evangelist/smoobu/refs/heads/main/apis.yml
+name: Smoobu
+kind: company
+description: Smoobu is an all-in-one vacation rental channel manager and property
+  management system for short-term rental hosts and property managers. It synchronizes
+  availability, rates, and reservations across Airbnb, Booking.com, Vrbo, and other
+  channels, and provides a booking website, unified guest inbox, automated messaging,
+  guest online check-in, invoicing, and dynamic pricing. The Smoobu REST API (base
+  https://login.smoobu.com/api) lets Professional subscribers and integration partners
+  read and write apartments, reservations, rates and availability, guests, and guest
+  messages, and receive webhook notifications when bookings change. Authentication is
+  via an API key header (with HMAC-signed requests recommended and OAuth 2 available
+  for partners).
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Vacation Rental
+- Channel Manager
+- Property Management
+- Short-Term Rental
+- Reservations
+- Hospitality
+created: '2026-07-03'
+modified: '2026-07-03'
+specificationVersion: '0.19'
+apis:
+- aid: smoobu:smoobu-reservations-api
+  name: Smoobu Reservations API
+  tags:
+  - Reservations
+  - Bookings
+  - Price Elements
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.smoobu.com/
+  baseURL: https://login.smoobu.com/api
+  properties:
+  - url: https://docs.smoobu.com/
+    type: Documentation
+  - url: https://docs.smoobu.com/
+    type: APIReference
+  - url: openapi/smoobu-openapi.yml
+    type: OpenAPI
+  - url: collections/smoobu.postman_collection.json
+    type: PostmanCollection
+  - url: collections/smoobu.opencollection.json
+    type: OpenCollection
+  description: List, retrieve, create, update, and delete reservations (bookings) across
+    all connected channels, with rich filtering by created, arrival, departure, and
+    modified dates. Manage per-reservation price elements (line items) and read the
+    booking, guest, channel, and payment details behind each stay.
+- aid: smoobu:smoobu-apartments-api
+  name: Smoobu Apartments API
+  tags:
+  - Apartments
+  - Properties
+  - Listings
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.smoobu.com/
+  baseURL: https://login.smoobu.com/api
+  properties:
+  - url: https://docs.smoobu.com/
+    type: Documentation
+  - url: https://docs.smoobu.com/
+    type: APIReference
+  - url: openapi/smoobu-openapi.yml
+    type: OpenAPI
+  - url: collections/smoobu.postman_collection.json
+    type: PostmanCollection
+  - url: collections/smoobu.opencollection.json
+    type: OpenCollection
+  description: List all apartments (properties/listings) in a Smoobu account and retrieve
+    a single apartment's details - name, location, currency, rooms, amenities, and
+    connected-channel metadata used to scope reservations, rates, and availability.
+- aid: smoobu:smoobu-rates-availability-api
+  name: Smoobu Rates and Availability API
+  tags:
+  - Rates
+  - Availability
+  - Pricing
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.smoobu.com/
+  baseURL: https://login.smoobu.com/api
+  properties:
+  - url: https://docs.smoobu.com/
+    type: Documentation
+  - url: https://docs.smoobu.com/
+    type: APIReference
+  - url: openapi/smoobu-openapi.yml
+    type: OpenAPI
+  - url: collections/smoobu.postman_collection.json
+    type: PostmanCollection
+  - url: collections/smoobu.opencollection.json
+    type: OpenCollection
+  description: Read daily rates, prices, availability, and minimum-length-of-stay per
+    apartment over a date range, and push rate, price, availability, and restriction
+    updates back to Smoobu (which propagates them to connected channels). Check bookable
+    availability and quote a price for a stay via the booking availability endpoint.
+- aid: smoobu:smoobu-guests-api
+  name: Smoobu Guests API
+  tags:
+  - Guests
+  - Contacts
+  - CRM
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.smoobu.com/
+  baseURL: https://login.smoobu.com/api
+  properties:
+  - url: https://docs.smoobu.com/
+    type: Documentation
+  - url: https://docs.smoobu.com/
+    type: APIReference
+  - url: openapi/smoobu-openapi.yml
+    type: OpenAPI
+  - url: collections/smoobu.postman_collection.json
+    type: PostmanCollection
+  - url: collections/smoobu.opencollection.json
+    type: OpenCollection
+  description: List and retrieve guest records - name, contact details, address, language,
+    and the reservations associated with each guest - for use in CRM, communication,
+    and guest-experience workflows.
+- aid: smoobu:smoobu-messaging-api
+  name: Smoobu Messaging API
+  tags:
+  - Messages
+  - Inbox
+  - Guest Communication
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.smoobu.com/
+  baseURL: https://login.smoobu.com/api
+  properties:
+  - url: https://docs.smoobu.com/
+    type: Documentation
+  - url: https://docs.smoobu.com/
+    type: APIReference
+  - url: openapi/smoobu-openapi.yml
+    type: OpenAPI
+  - url: collections/smoobu.postman_collection.json
+    type: PostmanCollection
+  - url: collections/smoobu.opencollection.json
+    type: OpenCollection
+  description: Read the message history for a reservation, list message threads across
+    the unified inbox, and send messages to the guest or to the host (channel) on a
+    reservation - powering automated guest communication and support tooling.
+- aid: smoobu:smoobu-webhooks-api
+  name: Smoobu Webhooks
+  tags:
+  - Webhooks
+  - Events
+  - Notifications
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.smoobu.com/
+  baseURL: https://login.smoobu.com/api
+  properties:
+  - url: https://docs.smoobu.com/
+    type: Documentation
+  - url: openapi/smoobu-openapi.yml
+    type: OpenAPI
+  description: Register an HTTPS endpoint to receive server-to-server webhook callbacks
+    when reservations change. Smoobu POSTs a JSON payload with an action field
+    (newReservation, updateReservation, cancelReservation, deleteReservation), the
+    account user id, and the affected reservation data, so integrations can stay in
+    sync without polling.
+common:
+- type: LinkedIn
+  url: https://www.linkedin.com/company/smoobu
+- type: Website
+  url: https://www.smoobu.com
+- type: Documentation
+  url: https://docs.smoobu.com/
+- type: Plans
+  url: plans/smoobu-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/smoobu-rate-limits.yml
+- type: FinOps
+  url: finops/smoobu-finops.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
