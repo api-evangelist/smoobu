@@ -1,0 +1,18 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/smoobu-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: apiKey
+  type: apiKey
+  in: header
+  parameter: Api-Key
+  description: Smoobu API key sent in the Api-Key header. HMAC-signed requests (X-API-Key /
+    X-Timestamp / X-Nonce / X-Signature) are the recommended method; OAuth 2 is available for
+    partners. The plain Api-Key header is documented as being sunset on 2026-09-25.
+  sources:
+  - openapi/smoobu-openapi.yml

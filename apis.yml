@@ -161,6 +161,10 @@ apis:
     account user id, and the affected reservation data, so integrations can stay in
     sync without polling.
 common:
+- type: DomainSecurity
+  url: security/smoobu-domain-security.yml
+- type: Authentication
+  url: authentication/smoobu-authentication.yml
 - type: LinkedIn
   url: https://www.linkedin.com/company/smoobu
 - type: Website
@@ -173,6 +177,8 @@ common:
   url: rate-limits/smoobu-rate-limits.yml
 - type: FinOps
   url: finops/smoobu-finops.yml
+- url: https://www.smoobu.com/blog/
+  type: Blog
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
