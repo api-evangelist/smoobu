@@ -161,6 +161,8 @@ apis:
     account user id, and the affected reservation data, so integrations can stay in
     sync without polling.
 common:
+- type: AgenticAccess
+  url: agentic-access/smoobu-agentic-access.yml
 - type: DomainSecurity
   url: security/smoobu-domain-security.yml
 - type: Authentication
