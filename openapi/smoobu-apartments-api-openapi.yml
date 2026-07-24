@@ -1,0 +1,65 @@
+openapi: 3.0.3
+info:
+  title: Smoobu Apartments API
+  description: The Smoobu API is a RESTful JSON API for the Smoobu vacation rental channel manager and property management system. It lets Professional subscribers and integration partners read and write apartments (listings), reservations (bookings), rates and availability, guests, and guest messages, and register webhooks for reservation changes. The primary base URL is https://login.smoobu.com/api; the public booking availability check is served under https://login.smoobu.com/booking. Authentication uses an API key sent in the "Api-Key" header (found in the Smoobu account under Settings > For Developers / API Keys). Smoobu additionally offers HMAC-signed requests (X-API-Key, X-Timestamp, X-Nonce, X-Signature headers) as the recommended method and OAuth 2 for partners; the legacy plain Api-Key header is documented as being sunset on 2026-09-25. Endpoints marked in descriptions as "modeled" are inferred from the documentation and should be verified against the live reference before production use.
+  version: '1.0'
+  contact:
+    name: Smoobu
+    url: https://www.smoobu.com
+servers:
+- url: https://login.smoobu.com
+  description: Smoobu production
+security:
+- apiKey: []
+tags:
+- name: Apartments
+  description: Properties / listings in the Smoobu account.
+paths:
+  /api/apartments:
+    get:
+      operationId: listApartments
+      tags:
+      - Apartments
+      summary: List apartments
+      description: Lists all apartments (properties/listings) in the account.
+      responses:
+        '200':
+          description: A list of apartments.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/apartments/{apartmentId}:
+    parameters:
+    - $ref: '#/components/parameters/ApartmentId'
+    get:
+      operationId: getApartment
+      tags:
+      - Apartments
+      summary: Get an apartment
+      description: Retrieves a single apartment's details by id.
+      responses:
+        '200':
+          description: The apartment.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  parameters:
+    ApartmentId:
+      name: apartmentId
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: The apartment id.
+  responses:
+    Unauthorized:
+      description: Authentication failed or the API key is missing or invalid.
+    NotFound:
+      description: The requested resource was not found.
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: Api-Key
+      description: Smoobu API key sent in the Api-Key header. HMAC-signed requests (X-API-Key / X-Timestamp / X-Nonce / X-Signature) are the recommended method; OAuth 2 is available for partners. The plain Api-Key header is documented as being sunset on 2026-09-25.

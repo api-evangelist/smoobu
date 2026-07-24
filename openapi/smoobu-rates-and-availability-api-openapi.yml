@@ -1,0 +1,143 @@
+openapi: 3.0.3
+info:
+  title: Smoobu Apartments Rates and Availability API
+  description: The Smoobu API is a RESTful JSON API for the Smoobu vacation rental channel manager and property management system. It lets Professional subscribers and integration partners read and write apartments (listings), reservations (bookings), rates and availability, guests, and guest messages, and register webhooks for reservation changes. The primary base URL is https://login.smoobu.com/api; the public booking availability check is served under https://login.smoobu.com/booking. Authentication uses an API key sent in the "Api-Key" header (found in the Smoobu account under Settings > For Developers / API Keys). Smoobu additionally offers HMAC-signed requests (X-API-Key, X-Timestamp, X-Nonce, X-Signature headers) as the recommended method and OAuth 2 for partners; the legacy plain Api-Key header is documented as being sunset on 2026-09-25. Endpoints marked in descriptions as "modeled" are inferred from the documentation and should be verified against the live reference before production use.
+  version: '1.0'
+  contact:
+    name: Smoobu
+    url: https://www.smoobu.com
+servers:
+- url: https://login.smoobu.com
+  description: Smoobu production
+security:
+- apiKey: []
+tags:
+- name: Rates and Availability
+  description: Daily rates, prices, availability, and booking availability checks.
+paths:
+  /api/rates:
+    get:
+      operationId: getRates
+      tags:
+      - Rates and Availability
+      summary: Get rates and availability
+      description: Returns daily rate, price, availability, and minimum-length-of-stay data per apartment over a date range.
+      parameters:
+      - name: start_date
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: end_date
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: apartments[]
+        in: query
+        schema:
+          type: array
+          items:
+            type: integer
+        description: One or more apartment ids to return rates for.
+      responses:
+        '200':
+          description: Daily rates and availability keyed by apartment and date.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: updateRates
+      tags:
+      - Rates and Availability
+      summary: Update rates and availability
+      description: Pushes rate, price, availability, and restriction updates to Smoobu, which propagates them to connected channels.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RatesInput'
+      responses:
+        '200':
+          description: Rates were updated.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /booking/checkApartmentAvailability:
+    post:
+      operationId: checkApartmentAvailability
+      tags:
+      - Rates and Availability
+      summary: Check apartment availability
+      description: Checks which of the given apartments are available for a stay and returns the price. Used by booking flows to quote a reservation before creating it.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                arrivalDate:
+                  type: string
+                  format: date
+                departureDate:
+                  type: string
+                  format: date
+                apartments:
+                  type: array
+                  items:
+                    type: integer
+                customerId:
+                  type: integer
+                guests:
+                  type: integer
+                discountCode:
+                  type: string
+              required:
+              - arrivalDate
+              - departureDate
+              - apartments
+      responses:
+        '200':
+          description: Availability and pricing for the requested apartments.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    RatesInput:
+      type: object
+      properties:
+        apartments:
+          type: array
+          items:
+            type: integer
+        operations:
+          type: array
+          items:
+            type: object
+            properties:
+              dates:
+                type: array
+                items:
+                  type: string
+                  format: date
+              daily_price:
+                type: number
+              min_length_of_stay:
+                type: integer
+              available:
+                type: integer
+  responses:
+    ValidationError:
+      description: The request payload failed validation.
+    Unauthorized:
+      description: Authentication failed or the API key is missing or invalid.
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: Api-Key
+      description: Smoobu API key sent in the Api-Key header. HMAC-signed requests (X-API-Key / X-Timestamp / X-Nonce / X-Signature) are the recommended method; OAuth 2 is available for partners. The plain Api-Key header is documented as being sunset on 2026-09-25.

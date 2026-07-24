@@ -1,0 +1,133 @@
+openapi: 3.0.3
+info:
+  title: Smoobu Apartments Messaging API
+  description: The Smoobu API is a RESTful JSON API for the Smoobu vacation rental channel manager and property management system. It lets Professional subscribers and integration partners read and write apartments (listings), reservations (bookings), rates and availability, guests, and guest messages, and register webhooks for reservation changes. The primary base URL is https://login.smoobu.com/api; the public booking availability check is served under https://login.smoobu.com/booking. Authentication uses an API key sent in the "Api-Key" header (found in the Smoobu account under Settings > For Developers / API Keys). Smoobu additionally offers HMAC-signed requests (X-API-Key, X-Timestamp, X-Nonce, X-Signature headers) as the recommended method and OAuth 2 for partners; the legacy plain Api-Key header is documented as being sunset on 2026-09-25. Endpoints marked in descriptions as "modeled" are inferred from the documentation and should be verified against the live reference before production use.
+  version: '1.0'
+  contact:
+    name: Smoobu
+    url: https://www.smoobu.com
+servers:
+- url: https://login.smoobu.com
+  description: Smoobu production
+security:
+- apiKey: []
+tags:
+- name: Messaging
+  description: Reservation messages and unified inbox threads.
+paths:
+  /api/reservations/{reservationId}/messages:
+    parameters:
+    - $ref: '#/components/parameters/ReservationId'
+    get:
+      operationId: listReservationMessages
+      tags:
+      - Messaging
+      summary: List reservation messages
+      description: Lists the message history for a reservation.
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+      - name: onlyRelatedToGuest
+        in: query
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: A list of messages.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/reservations/{reservationId}/messages/send-message-to-guest:
+    parameters:
+    - $ref: '#/components/parameters/ReservationId'
+    post:
+      operationId: sendMessageToGuest
+      tags:
+      - Messaging
+      summary: Send a message to the guest
+      description: Sends a message to the guest on a reservation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageInput'
+      responses:
+        '200':
+          description: The message was sent.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/reservations/{reservationId}/messages/send-message-to-host:
+    parameters:
+    - $ref: '#/components/parameters/ReservationId'
+    post:
+      operationId: sendMessageToHost
+      tags:
+      - Messaging
+      summary: Send a message to the host
+      description: Sends a message to the host/channel on a reservation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageInput'
+      responses:
+        '200':
+          description: The message was sent.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/threads:
+    get:
+      operationId: listThreads
+      tags:
+      - Messaging
+      summary: List message threads
+      description: Lists message threads across the unified inbox, with pagination.
+      parameters:
+      - name: page_number
+        in: query
+        schema:
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          type: integer
+      - name: apartments[]
+        in: query
+        schema:
+          type: array
+          items:
+            type: integer
+      responses:
+        '200':
+          description: A paginated list of threads.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    MessageInput:
+      type: object
+      properties:
+        messageBody:
+          type: string
+      required:
+      - messageBody
+  responses:
+    Unauthorized:
+      description: Authentication failed or the API key is missing or invalid.
+  parameters:
+    ReservationId:
+      name: reservationId
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: The reservation id.
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: Api-Key
+      description: Smoobu API key sent in the Api-Key header. HMAC-signed requests (X-API-Key / X-Timestamp / X-Nonce / X-Signature) are the recommended method; OAuth 2 is available for partners. The plain Api-Key header is documented as being sunset on 2026-09-25.
