@@ -1,0 +1,24 @@
+{
+  "provider": "smoobu",
+  "sources": [
+    "smoobu-apartments-api-openapi.yml",
+    "smoobu-guests-api-openapi.yml",
+    "smoobu-messaging-api-openapi.yml",
+    "smoobu-rates-and-availability-api-openapi.yml",
+    "smoobu-reservations-api-openapi.yml",
+    "smoobu-user-api-openapi.yml"
+  ],
+  "outputs": [
+    "smoobu-apartments-api-openapi.yml",
+    "smoobu-guests-api-openapi.yml",
+    "smoobu-messaging-api-openapi.yml",
+    "smoobu-rates-and-availability-api-openapi.yml",
+    "smoobu-reservations-api-openapi.yml",
+    "smoobu-user-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
