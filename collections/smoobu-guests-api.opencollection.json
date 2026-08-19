@@ -1,0 +1,67 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Smoobu Apartments Guests API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Key",
+      "value": "{{Api-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Guests",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List guests",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://login.smoobu.com/api/guests",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Lists guest records, with pagination."
+        },
+        {
+          "info": {
+            "name": "Get a guest",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://login.smoobu.com/api/guests/:guestId",
+            "params": [
+              {
+                "name": "guestId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieves a single guest record by id."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

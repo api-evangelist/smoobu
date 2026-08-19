@@ -1,0 +1,548 @@
+{
+  "item": [
+    {
+      "id": "56fde705-e5f4-44bd-88db-1a272d285658",
+      "name": "Rates and Availability",
+      "description": {
+        "content": "Daily rates, prices, availability, and booking availability checks.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9e9d7cee-0771-4afd-8e79-fe45f1f3752c",
+          "name": "Get rates and availability",
+          "request": {
+            "name": "Get rates and availability",
+            "description": {
+              "content": "Returns daily rate, price, availability, and minimum-length-of-stay data per apartment over a date range.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "rates"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<date>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<date>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "apartments[]",
+                  "value": "<integer>",
+                  "description": "One or more apartment ids to return rates for."
+                },
+                {
+                  "disabled": false,
+                  "key": "apartments[]",
+                  "value": "<integer>",
+                  "description": "One or more apartment ids to return rates for."
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "48b67343-ef7a-41fd-b9f3-a8eae06bb29d",
+              "name": "Daily rates and availability keyed by apartment and date.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "rates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "apartments[]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "apartments[]",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "dd14bd19-d455-4c13-aa02-a083afe2d772",
+              "name": "Authentication failed or the API key is missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "rates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "apartments[]",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "apartments[]",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9ced44c8-e0c5-496d-b904-186382b2df88",
+          "name": "Update rates and availability",
+          "request": {
+            "name": "Update rates and availability",
+            "description": {
+              "content": "Pushes rate, price, availability, and restriction updates to Smoobu, which propagates them to connected channels.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "rates"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"apartments\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"operations\": [\n    {\n      \"dates\": [\n        \"<date>\",\n        \"<date>\"\n      ],\n      \"daily_price\": \"<number>\",\n      \"min_length_of_stay\": \"<integer>\",\n      \"available\": \"<integer>\"\n    },\n    {\n      \"dates\": [\n        \"<date>\",\n        \"<date>\"\n      ],\n      \"daily_price\": \"<number>\",\n      \"min_length_of_stay\": \"<integer>\",\n      \"available\": \"<integer>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "54167eec-da54-4d56-9cc8-ca62b6c12fd5",
+              "name": "Rates were updated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "rates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"apartments\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"operations\": [\n    {\n      \"dates\": [\n        \"<date>\",\n        \"<date>\"\n      ],\n      \"daily_price\": \"<number>\",\n      \"min_length_of_stay\": \"<integer>\",\n      \"available\": \"<integer>\"\n    },\n    {\n      \"dates\": [\n        \"<date>\",\n        \"<date>\"\n      ],\n      \"daily_price\": \"<number>\",\n      \"min_length_of_stay\": \"<integer>\",\n      \"available\": \"<integer>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "41d440df-5be5-4672-98bd-affb9a5ac9e7",
+              "name": "Authentication failed or the API key is missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "rates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"apartments\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"operations\": [\n    {\n      \"dates\": [\n        \"<date>\",\n        \"<date>\"\n      ],\n      \"daily_price\": \"<number>\",\n      \"min_length_of_stay\": \"<integer>\",\n      \"available\": \"<integer>\"\n    },\n    {\n      \"dates\": [\n        \"<date>\",\n        \"<date>\"\n      ],\n      \"daily_price\": \"<number>\",\n      \"min_length_of_stay\": \"<integer>\",\n      \"available\": \"<integer>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7bd2d4e9-58e9-4c31-be68-6d483f570e67",
+              "name": "The request payload failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "rates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"apartments\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"operations\": [\n    {\n      \"dates\": [\n        \"<date>\",\n        \"<date>\"\n      ],\n      \"daily_price\": \"<number>\",\n      \"min_length_of_stay\": \"<integer>\",\n      \"available\": \"<integer>\"\n    },\n    {\n      \"dates\": [\n        \"<date>\",\n        \"<date>\"\n      ],\n      \"daily_price\": \"<number>\",\n      \"min_length_of_stay\": \"<integer>\",\n      \"available\": \"<integer>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c462689d-1f56-48c4-aa11-e5a9101f722c",
+          "name": "Check apartment availability",
+          "request": {
+            "name": "Check apartment availability",
+            "description": {
+              "content": "Checks which of the given apartments are available for a stay and returns the price. Used by booking flows to quote a reservation before creating it.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "booking",
+                "checkApartmentAvailability"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"arrivalDate\": \"<date>\",\n  \"departureDate\": \"<date>\",\n  \"apartments\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"customerId\": \"<integer>\",\n  \"guests\": \"<integer>\",\n  \"discountCode\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2fb72845-793c-4b09-8643-c104d6322c6b",
+              "name": "Availability and pricing for the requested apartments.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "booking",
+                    "checkApartmentAvailability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"arrivalDate\": \"<date>\",\n  \"departureDate\": \"<date>\",\n  \"apartments\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"customerId\": \"<integer>\",\n  \"guests\": \"<integer>\",\n  \"discountCode\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "de7f8f1f-29d9-40f7-bc0e-fd3904a53651",
+              "name": "Authentication failed or the API key is missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "booking",
+                    "checkApartmentAvailability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Api-Key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"arrivalDate\": \"<date>\",\n  \"departureDate\": \"<date>\",\n  \"apartments\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"customerId\": \"<integer>\",\n  \"guests\": \"<integer>\",\n  \"discountCode\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://login.smoobu.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Api-Key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "266db754-804b-4aea-a0e8-1db3df44b830",
+    "name": "Smoobu Apartments Rates and Availability API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Smoobu API is a RESTful JSON API for the Smoobu vacation rental channel manager and property management system. It lets Professional subscribers and integration partners read and write apartments (listings), reservations (bookings), rates and availability, guests, and guest messages, and register webhooks for reservation changes. The primary base URL is https://login.smoobu.com/api; the public booking availability check is served under https://login.smoobu.com/booking. Authentication uses an API key sent in the \"Api-Key\" header (found in the Smoobu account under Settings > For Developers / API Keys). Smoobu additionally offers HMAC-signed requests (X-API-Key, X-Timestamp, X-Nonce, X-Signature headers) as the recommended method and OAuth 2 for partners; the legacy plain Api-Key header is documented as being sunset on 2026-09-25. Endpoints marked in descriptions as \"modeled\" are inferred from the documentation and should be verified against the live reference before production use.\n\nContact Support:\n Name: Smoobu",
+      "type": "text/plain"
+    }
+  }
+}

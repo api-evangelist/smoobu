@@ -1,0 +1,245 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Smoobu Apartments Reservations API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Key",
+      "value": "{{Api-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Reservations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List reservations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://login.smoobu.com/api/reservations",
+            "params": [
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Filter reservations with arrival on or after this date."
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "Filter reservations with departure on or before this date."
+              },
+              {
+                "name": "arrivalFrom",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "arrivalTo",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "departureFrom",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "departureTo",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "created_from",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "created_to",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "modifiedFrom",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "modifiedTo",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "apartmentId",
+                "value": "",
+                "type": "query",
+                "description": "Restrict to a single apartment."
+              },
+              {
+                "name": "showCancellation",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "excludeBlocked",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "includeRelated",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "includePriceElements",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Lists reservations, filterable by created, arrival, departure, and modified date ranges, by apartment, and with pagination."
+        },
+        {
+          "info": {
+            "name": "Create a reservation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://login.smoobu.com/api/reservations",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a reservation (booking or blocked period) on an apartment. Requires apartmentId, arrivalDate, departureDate, and channelId along with guest details."
+        },
+        {
+          "info": {
+            "name": "Get a reservation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://login.smoobu.com/api/reservations/:reservationId",
+            "params": [
+              {
+                "name": "reservationId",
+                "value": "",
+                "type": "path",
+                "description": "The reservation id."
+              }
+            ]
+          },
+          "docs": "Retrieves a single reservation by id."
+        },
+        {
+          "info": {
+            "name": "Update a reservation",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://login.smoobu.com/api/reservations/:reservationId",
+            "params": [
+              {
+                "name": "reservationId",
+                "value": "",
+                "type": "path",
+                "description": "The reservation id."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an existing reservation."
+        },
+        {
+          "info": {
+            "name": "Delete a reservation",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://login.smoobu.com/api/reservations/:reservationId",
+            "params": [
+              {
+                "name": "reservationId",
+                "value": "",
+                "type": "path",
+                "description": "The reservation id."
+              }
+            ]
+          },
+          "docs": "Deletes (cancels) a reservation by id."
+        },
+        {
+          "info": {
+            "name": "List price elements",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://login.smoobu.com/api/reservations/:reservationId/price-elements",
+            "params": [
+              {
+                "name": "reservationId",
+                "value": "",
+                "type": "path",
+                "description": "The reservation id."
+              }
+            ]
+          },
+          "docs": "Lists the price elements (line items) on a reservation."
+        },
+        {
+          "info": {
+            "name": "Create a price element",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://login.smoobu.com/api/reservations/:reservationId/price-elements",
+            "params": [
+              {
+                "name": "reservationId",
+                "value": "",
+                "type": "path",
+                "description": "The reservation id."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds a price element (line item) to a reservation. (Modeled from documentation.)"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

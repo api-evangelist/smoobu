@@ -1,0 +1,129 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Smoobu Apartments Messaging API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Key",
+      "value": "{{Api-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Messaging",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List reservation messages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://login.smoobu.com/api/reservations/:reservationId/messages",
+            "params": [
+              {
+                "name": "reservationId",
+                "value": "",
+                "type": "path",
+                "description": "The reservation id."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "onlyRelatedToGuest",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Lists the message history for a reservation."
+        },
+        {
+          "info": {
+            "name": "Send a message to the guest",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://login.smoobu.com/api/reservations/:reservationId/messages/send-message-to-guest",
+            "params": [
+              {
+                "name": "reservationId",
+                "value": "",
+                "type": "path",
+                "description": "The reservation id."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sends a message to the guest on a reservation."
+        },
+        {
+          "info": {
+            "name": "Send a message to the host",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://login.smoobu.com/api/reservations/:reservationId/messages/send-message-to-host",
+            "params": [
+              {
+                "name": "reservationId",
+                "value": "",
+                "type": "path",
+                "description": "The reservation id."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sends a message to the host/channel on a reservation."
+        },
+        {
+          "info": {
+            "name": "List message threads",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://login.smoobu.com/api/threads",
+            "params": [
+              {
+                "name": "page_number",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "apartments[]",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Lists message threads across the unified inbox, with pagination."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,56 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Smoobu Apartments API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Api-Key",
+      "value": "{{Api-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Apartments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List apartments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://login.smoobu.com/api/apartments"
+          },
+          "docs": "Lists all apartments (properties/listings) in the account."
+        },
+        {
+          "info": {
+            "name": "Get an apartment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://login.smoobu.com/api/apartments/:apartmentId",
+            "params": [
+              {
+                "name": "apartmentId",
+                "value": "",
+                "type": "path",
+                "description": "The apartment id."
+              }
+            ]
+          },
+          "docs": "Retrieves a single apartment's details by id."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
