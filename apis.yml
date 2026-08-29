@@ -158,6 +158,9 @@ apis:
   - type: OpenCollection
     url: collections/smoobu.opencollection.json
 common:
+- type: CapabilityMap
+  url: capabilities/smoobu-capability-edges.yml
+  name: Smoobu Business Capability Map
 - type: AgenticAccess
   url: agentic-access/smoobu-agentic-access.yml
 - type: DomainSecurity

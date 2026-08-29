@@ -1,0 +1,45 @@
+slug: smoobu
+provider: Smoobu
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Travel & Hospitality
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 3
+edges:
+- tag: Reservations
+  spec_file: smoobu-reservations-api-openapi.yml
+  capability_id: BC-4020.10
+  capability_id_l1: BC-4020
+  capability_name: Reservation Capture
+  confidence: 0.8
+  evidence: POST /api/reservations "Create a reservation"; PUT /api/reservations/{reservationId} "Update
+    a reservation"; POST .../price-elements "Create a price element"
+  reason: Full CRUD over reservations plus reservation-level price elements is squarely reservation lifecycle
+    management; capture is the primary act, with modification/cancellation also present.
+- tag: Guests
+  spec_file: smoobu-guests-api-openapi.yml
+  capability_id: BC-4040.10
+  capability_id_l1: BC-4040
+  capability_name: Guest Profile & Identity Management
+  confidence: 0.72
+  evidence: GET /api/guests "List guests"; GET /api/guests/{guestId} "Get a guest"
+  reason: Operations expose the guest record maintained by the PMS, i.e. the guest profile store. Sub-capability
+    Guest Profile & Identity Management fits; confidence tempered because only read operations and no
+    schema detail are given.
+- tag: Apartments
+  spec_file: smoobu-apartments-api-openapi.yml
+  capability_id: BC-4000.10
+  capability_id_l1: BC-4000
+  capability_name: Lodging Product Management
+  confidence: 0.7
+  evidence: GET /api/apartments "List apartments"; API "lets ... partners read and write apartments (listings)"
+  reason: Apartments are the bookable accommodation units (listings) of a vacation-rental PMS, so this
+    is definition/maintenance of the lodging product master. Read-only surface and absence of schemas
+    keeps confidence moderate.
