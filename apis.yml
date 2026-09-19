@@ -39,6 +39,13 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/smoobu.png
 tags:
+- Vacation Rentals
+- Channel Manager
+- Property Management
+- Short-Term Rental
+- Reservations
+- Hospitality
+tags_raw:
 - Vacation Rental
 - Channel Manager
 - Property Management
