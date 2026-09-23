@@ -1,7 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Smoobu Apartments Reservations API
-  description: The Smoobu API is a RESTful JSON API for the Smoobu vacation rental channel manager and property management system. It lets Professional subscribers and integration partners read and write apartments (listings), reservations (bookings), rates and availability, guests, and guest messages, and register webhooks for reservation changes. The primary base URL is https://login.smoobu.com/api; the public booking availability check is served under https://login.smoobu.com/booking. Authentication uses an API key sent in the "Api-Key" header (found in the Smoobu account under Settings > For Developers / API Keys). Smoobu additionally offers HMAC-signed requests (X-API-Key, X-Timestamp, X-Nonce, X-Signature headers) as the recommended method and OAuth 2 for partners; the legacy plain Api-Key header is documented as being sunset on 2026-09-25. Endpoints marked in descriptions as "modeled" are inferred from the documentation and should be verified against the live reference before production use.
+  title: Smoobu Reservations API
+  description: The Smoobu API is a RESTful JSON API for the Smoobu vacation rental channel manager and property management system.
   version: '1.0'
   contact:
     name: Smoobu
@@ -215,6 +215,14 @@ components:
       description: Authentication failed or the API key is missing or invalid.
     NotFound:
       description: The requested resource was not found.
+  parameters:
+    ReservationId:
+      name: reservationId
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: The reservation id.
   schemas:
     ReservationInput:
       type: object
@@ -251,14 +259,6 @@ components:
       - departureDate
       - apartmentId
       - channelId
-  parameters:
-    ReservationId:
-      name: reservationId
-      in: path
-      required: true
-      schema:
-        type: integer
-      description: The reservation id.
   securitySchemes:
     apiKey:
       type: apiKey
