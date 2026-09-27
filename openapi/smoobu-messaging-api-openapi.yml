@@ -109,14 +109,6 @@ components:
   responses:
     Unauthorized:
       description: Authentication failed or the API key is missing or invalid.
-  parameters:
-    ReservationId:
-      name: reservationId
-      in: path
-      required: true
-      schema:
-        type: integer
-      description: The reservation id.
   schemas:
     MessageInput:
       type: object
@@ -125,6 +117,14 @@ components:
           type: string
       required:
       - messageBody
+  parameters:
+    ReservationId:
+      name: reservationId
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: The reservation id.
   securitySchemes:
     apiKey:
       type: apiKey

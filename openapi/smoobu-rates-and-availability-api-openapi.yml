@@ -107,10 +107,10 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   responses:
-    ValidationError:
-      description: The request payload failed validation.
     Unauthorized:
       description: Authentication failed or the API key is missing or invalid.
+    ValidationError:
+      description: The request payload failed validation.
   schemas:
     RatesInput:
       type: object
