@@ -215,14 +215,6 @@ components:
       description: The request payload failed validation.
     NotFound:
       description: The requested resource was not found.
-  parameters:
-    ReservationId:
-      name: reservationId
-      in: path
-      required: true
-      schema:
-        type: integer
-      description: The reservation id.
   schemas:
     ReservationInput:
       type: object
@@ -259,6 +251,14 @@ components:
       - departureDate
       - apartmentId
       - channelId
+  parameters:
+    ReservationId:
+      name: reservationId
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: The reservation id.
   securitySchemes:
     apiKey:
       type: apiKey
