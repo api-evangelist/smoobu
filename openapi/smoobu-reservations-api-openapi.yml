@@ -208,13 +208,6 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  responses:
-    Unauthorized:
-      description: Authentication failed or the API key is missing or invalid.
-    ValidationError:
-      description: The request payload failed validation.
-    NotFound:
-      description: The requested resource was not found.
   schemas:
     ReservationInput:
       type: object
@@ -251,6 +244,13 @@ components:
       - departureDate
       - apartmentId
       - channelId
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+    Unauthorized:
+      description: Authentication failed or the API key is missing or invalid.
+    ValidationError:
+      description: The request payload failed validation.
   parameters:
     ReservationId:
       name: reservationId
