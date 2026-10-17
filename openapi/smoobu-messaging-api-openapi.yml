@@ -106,17 +106,6 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  schemas:
-    MessageInput:
-      type: object
-      properties:
-        messageBody:
-          type: string
-      required:
-      - messageBody
-  responses:
-    Unauthorized:
-      description: Authentication failed or the API key is missing or invalid.
   parameters:
     ReservationId:
       name: reservationId
@@ -125,6 +114,17 @@ components:
       schema:
         type: integer
       description: The reservation id.
+  responses:
+    Unauthorized:
+      description: Authentication failed or the API key is missing or invalid.
+  schemas:
+    MessageInput:
+      type: object
+      properties:
+        messageBody:
+          type: string
+      required:
+      - messageBody
   securitySchemes:
     apiKey:
       type: apiKey

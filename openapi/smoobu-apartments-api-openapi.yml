@@ -44,11 +44,6 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  responses:
-    Unauthorized:
-      description: Authentication failed or the API key is missing or invalid.
-    NotFound:
-      description: The requested resource was not found.
   parameters:
     ApartmentId:
       name: apartmentId
@@ -57,6 +52,11 @@ components:
       schema:
         type: integer
       description: The apartment id.
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+    Unauthorized:
+      description: Authentication failed or the API key is missing or invalid.
   securitySchemes:
     apiKey:
       type: apiKey
